@@ -1,5 +1,6 @@
 package org.example.userauthservice_sept2025.controllers;
 
+import org.antlr.v4.runtime.misc.Pair;
 import org.example.userauthservice_sept2025.dtos.LoginRequestDto;
 import org.example.userauthservice_sept2025.dtos.SignupRequestDto;
 import org.example.userauthservice_sept2025.dtos.UserDto;
@@ -12,6 +13,8 @@ import org.example.userauthservice_sept2025.services.IAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,8 +41,11 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<UserDto> login(@RequestBody LoginRequestDto loginRequestDto) {
        try {
-           User user = authService.login(loginRequestDto.getEmail(), loginRequestDto.getPassword());
-           return new ResponseEntity<>(from(user),HttpStatus.OK);
+           Pair<User,String> response = authService.login(loginRequestDto.getEmail(), loginRequestDto.getPassword());
+           String token = response.b;
+           MultiValueMap<String,String> headers = new LinkedMultiValueMap<>();
+           headers.add("Set_Cookie",token);
+           return new ResponseEntity<>(from(response.a),headers,HttpStatus.OK);
        }catch (PasswordMismatchException exception) {
            return new ResponseEntity<>(null,HttpStatus.UNAUTHORIZED);
        }catch (UserNotRegisteredException exception1) {
