@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.misc.Pair;
 import org.example.userauthservice_sept2025.dtos.LoginRequestDto;
 import org.example.userauthservice_sept2025.dtos.SignupRequestDto;
 import org.example.userauthservice_sept2025.dtos.UserDto;
+import org.example.userauthservice_sept2025.dtos.ValidateTokenRequestDto;
 import org.example.userauthservice_sept2025.exceptions.PasswordMismatchException;
 import org.example.userauthservice_sept2025.exceptions.UserExistException;
 import org.example.userauthservice_sept2025.exceptions.UserNotRegisteredException;
@@ -50,6 +51,17 @@ public class AuthController {
            return new ResponseEntity<>(null,HttpStatus.UNAUTHORIZED);
        }catch (UserNotRegisteredException exception1) {
            return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
+       }
+    }
+
+
+    @PostMapping("/validateToken")
+    public ResponseEntity<String> validateToken(@RequestBody ValidateTokenRequestDto validateTokenRequestDto) {
+       Boolean validationResult = authService.validateToken(validateTokenRequestDto.getToken(), validateTokenRequestDto.getUserId());
+       if(validationResult) {
+           return new ResponseEntity<>("Token Valid and Non Expired",HttpStatus.OK);
+       } else {
+           return new ResponseEntity<>("Token invalid or expired",HttpStatus.UNAUTHORIZED);
        }
     }
 

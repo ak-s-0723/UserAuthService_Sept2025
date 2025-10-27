@@ -8,4 +8,6 @@ public interface IAuthService {
     User signup(String email, String password, String name, String phoneNumber);
 
     Pair<User,String> login(String email, String password);
+
+    Boolean validateToken(String token,Long userId);
 }
