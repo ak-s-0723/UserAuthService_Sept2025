@@ -19,13 +19,13 @@ public class SecurityConfig {
      }
 
 
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-//        httpSecurity.cors().disable();
-//        httpSecurity.csrf().disable();
-//        httpSecurity.authorizeHttpRequests(authorize->authorize.anyRequest().permitAll());
-//        return httpSecurity.build();
-//    }
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.cors().disable();
+        httpSecurity.csrf().disable();
+        httpSecurity.authorizeHttpRequests(authorize->authorize.anyRequest().permitAll());
+        return httpSecurity.build();
+    }
 
     @Bean
     public SecretKey secretKey() {
